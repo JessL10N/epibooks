@@ -1,18 +1,13 @@
 import { useContext } from "react";
-
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/esm/Row";
-import Container from "react-bootstrap/esm/Container";
-
-//component imports
-import CommentArea from "../CommentArea/CommentArea.component";
+import { Link } from "react-router";
+import { Col, Card, Row, Container, Button } from "react-bootstrap";
 
 //style imports
 import "./SingleBook.style.css";
 
 //context import
 import { IdSelectedContext } from "../../Contexts/context";
+
 
 const SingleBook = (props) => {
   const { idSelected, setIdSelected } = useContext(
@@ -25,16 +20,15 @@ const SingleBook = (props) => {
 
   const handleClick = () => {
     if (isSelected()) {
-      setIdSelected(0);
+      setIdSelected(123456789);
     } else {
       setIdSelected(props.asin);
     }
   };
 
-  //const { book } = props;
   return (
-    <Col sm={isSelected() ? 12 : 3}>
-      <Container className="Card-Container">
+    <Col sm={4}>
+      <Container className="Card-Container" data-testid="singleBook">
         <Row>
           <Col className="p-0">
             <Card
@@ -49,18 +43,12 @@ const SingleBook = (props) => {
                 variant="top"
                 src={props.book.img}
               />
+              <Button info className="card-button">
+                <Link to={`/book/${props.asin}`} style={{color:"white", textDecoration:"none"}}>Vai al libro</Link></Button>
               <Card.Body>
                 <Card.Text>{props.book.title}</Card.Text>
               </Card.Body>
             </Card>
-          </Col>
-          <Col
-            className={`${!isSelected() && "d-none"} p-0`}
-            sm={9}
-          >
-            {isSelected() && (
-              <CommentArea asin={props.asin} />
-            )}
           </Col>
         </Row>
       </Container>

@@ -1,12 +1,6 @@
 import { useState, useContext } from "react";
 
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import ToggleButton from "react-bootstrap/ToggleButton";
+import { Container, Nav, Navbar, Form, Button, ButtonGroup, ToggleButton} from "react-bootstrap";
 
 //data import
 import bookStore from "../../assets/scifi.json";
@@ -24,7 +18,6 @@ const MyNav = ({ toggleTheme }) => {
   const { bookList, setBookList } = useContext(BookContext);
 
   const handleChange = (event) => {
-    //console.log(event.target.value);
     const filterResult = bookStore.filter((book) =>
       book.title
         .toLowerCase()
@@ -40,11 +33,11 @@ const MyNav = ({ toggleTheme }) => {
       data-bs-theme={theme}
     >
       <Container>
-        <Navbar.Brand href="#">EpiBooks</Navbar.Brand>
+        <Navbar.Brand href="/">EpiBooks</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto d-flex gap-2">
-            <Nav.Link href="#">Home</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="#">About</Nav.Link>
             <Nav.Link href="#">Browse</Nav.Link>
             <ButtonGroup>

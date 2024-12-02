@@ -1,13 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import Card from 'react-bootstrap/Card';
+
+//style import
+import '../SingleBook/SingleBook.style.css'
 
 // component imports
 import CommentList from "../CommentList/CommentList.component";
 import AddComment from "../AddComment/AddComment.component";
 
-const CommentArea = ({ asin }) => {
+//context import
+import { BookContext } from "../../Contexts/context";
+
+
+const CommentArea = ({ asin }) => {  
+
   const [commentList, setCommentList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, [asin]);
+
+  const refreshedPage = () => {
+    return asin === 123456789;
+  }
+
+
+  const {bookList} = useContext(BookContext);
+
+
+  const CommentContent = () => {
+    return (
+     <>
+     {commentList.map((commentObj) => (
+             <CommentList
+               key={commentObj._id}
+               commentObj={commentObj}
+               onDelete={deleteComment}
+               onUpdate={updateComment}
+               setEditingCommentId={setEditingCommentId}
+               isEditing={commentObj._id === editingCommentId}
+             />
+           ))}
+           <AddComment asin={asin} addNewComment={addNewComment} />
+     </>
+    )
+   }
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -18,7 +59,7 @@ const CommentArea = ({ asin }) => {
         },
       });
       if (!response.ok) {
-        throw new Error("Errore nel recupero dei commenti.");
+        throw new Error("Errore nel recupero dei commenti");
       }
       const data = await response.json();
       setCommentList(data);
@@ -45,7 +86,7 @@ const CommentArea = ({ asin }) => {
       if (response.ok) {
         setCommentList((prevComments) => prevComments.filter((comment) => comment._id !== commentId));
       } else {
-        throw new Error("Errore nell'eliminazione del commento.");
+        throw new Error("Errore nell'eliminazione del commento");
       }
     } catch (err) {
       setError(err.message);
@@ -71,16 +112,12 @@ const CommentArea = ({ asin }) => {
           )
         );
       } else {
-        throw new Error("Errore nell'aggiornamento del commento.");
+        throw new Error("Errore nell'aggiornamento del commento");
       }
     } catch (err) {
       setError(err.message);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [asin]);
 
   if (loading) {
     return <div>Caricamento commenti...</div>;
@@ -90,24 +127,33 @@ const CommentArea = ({ asin }) => {
     return <div>Errore nel caricamento dei commenti: {error}</div>;
   }
 
+  const bookTitle = () => {
+    if (asin === 123456789) return "";
+    const book = bookList.find((el) => el.asin === asin);
+    return book.title;
+  };
+
   return (
-    <div className="comment-area">
-      <h3 className="m-2">Recensioni {asin}</h3>
-      {commentList.length === 0 ? (
-        <p>Non ci sono ancora commenti per questo libro.</p>
-      ) : (
-        commentList.map((commentObj) => (
-          <CommentList
-            key={commentObj._id}
-            commentObj={commentObj}
-            onDelete={deleteComment}
-            onUpdate={updateComment} // Passa la funzione di aggiornamento
-          />
-        ))
-      )}
-      <AddComment asin={asin} addNewComment={addNewComment} />
+    <div className="comment-area m-2 ps-0" data-testid="commentElement">
+      <div className="inner-container">
+      <h3 className="m-2">Recensioni<span className="bookTitle d-block text-primary h5 mt-2 mb-2"> {bookTitle()} </span></h3>
+      {refreshedPage() ? (<DefaultComment />) : (<CommentContent />) }
+      </div>      
     </div>
   );
 };
+
+const DefaultComment = () => {
+  return (
+
+    <Card className="m-2">
+      <Card.Body>
+        <Card.Text className="text-default-comment">
+          Clicca su un libro per vedere le recensioni
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
 
 export default CommentArea;

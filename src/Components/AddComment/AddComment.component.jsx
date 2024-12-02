@@ -1,12 +1,7 @@
 import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap"
 
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-
+//style import
 import "./AddComment.style.css";
 
 const AddComment = ({ asin, addNewComment }) => {
@@ -29,7 +24,7 @@ const AddComment = ({ asin, addNewComment }) => {
 
     if (response.ok) {
       const data = await response.json();
-      addNewComment(data); // Passiamo il nuovo commento al componente padre
+      addNewComment(data);
     } else {
       console.error("Errore nell'invio del commento:", response.status);
     }
@@ -45,9 +40,9 @@ const AddComment = ({ asin, addNewComment }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await postData(); // Invia il commento
-    setComment(""); // Resetta il commento
-    setRating(""); // Resetta il rating
+    await postData();
+    setComment("");
+    setRating("");
   };
 
   return (
@@ -56,7 +51,7 @@ const AddComment = ({ asin, addNewComment }) => {
       <Form onSubmit={handleSubmit}>
         <Container>
           <Row className="my-1 g-1">
-            <Col sm={7}>
+            <Col sm={12}>
               <Form.Control
                 type="text"
                 placeholder="Cosa ne pensi di questo libro?"
@@ -65,7 +60,7 @@ const AddComment = ({ asin, addNewComment }) => {
               />
             </Col>
 
-            <Col sm={2}>
+            <Col sm={12}>
               <Form.Control
                 type="text"
                 placeholder="Rating (1-5)"
@@ -73,7 +68,7 @@ const AddComment = ({ asin, addNewComment }) => {
                 value={rating}
               />
             </Col>
-            <Col sm={3}>
+            <Col sm={12}>
               <Button type="submit">Aggiungi Commento</Button>
             </Col>
           </Row>

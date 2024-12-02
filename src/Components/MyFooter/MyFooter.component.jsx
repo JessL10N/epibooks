@@ -11,7 +11,7 @@ const MyFooter = () => {
       data-bs-theme="dark"
     >
       <Container expand="lg" className="">
-        EpiBook copyright 2024
+        EpiBooks copyright 2024
       </Container>
     </footer>
   );
